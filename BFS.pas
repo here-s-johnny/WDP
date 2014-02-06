@@ -38,10 +38,12 @@ var A : tab;
 procedure initKolejka(var k : kolejka);
   
   begin
+    new(k);
     k^.first := nil;
+    k^.last := k^.first;
   end;
 
-procedure wstawZa(l : lista; n : integer);
+procedure wstawZa(var l : lista; n : integer);
   
   var pom : lista;
 
@@ -58,26 +60,32 @@ procedure wstawDoKolejki(var k : kolejka; var n : integer);
     if k^.first = nil then begin
       new(k^.first);
       k^.first^.n := n;
-      k^.first := k^.last;
+      k^.first^.next := nil;
+      k^.last := k^.first;
     end else begin
       wstawZa(k^.last,n);
       k^.last := k^.last^.next;
     end;
   end;
 
-procedure pobierz(var k : kolejka; var n : integer);
+procedure pobierz(k : kolejka; var n : integer);
+
+  begin
+    n := k^.first^.n;
+  end;
+
+procedure usun(var k : kolejka);
   
   var pom : lista;
    
   begin
-    n := k^.first^.n;
     pom := k^.first;
     if k^.first = k^.last then k^.first := nil
     else k^.first := k^.first^.next;
     dispose(pom);
   end;
   
-function pusta(var k : kolejka): boolean;
+function pusta(k : kolejka): boolean;
 
   begin
     pusta := k^.first = nil;
@@ -90,7 +98,7 @@ procedure initTab(var A : tab);
   var i : integer; 
   
   begin
-    for i :=1 to n do A[i] := nil;
+    for i := 1 to n do A[i] := nil;
   end;
 
 procedure addToList(var l : nodes; var n : integer);
@@ -122,7 +130,7 @@ procedure addNodes(var A : tab; var amount : integer);
 
 procedure BFS(var A : tab; var k : kolejka; var s : integer; var amount : integer);
 
-  var v,u,useless : integer;
+  var v,u : integer;
 
   begin
     for v := 1 to amount do begin
@@ -135,7 +143,7 @@ procedure BFS(var A : tab; var k : kolejka; var s : integer; var amount : intege
     wstawDoKolejki(k,s);
     while not pusta(k) do begin
       pobierz(k,u);
-      while A[u]^.next <> nil do begin
+      while A[u] <> nil do begin
         v := A[u]^.n;
         if kolory[v] = bialy then begin
           d[v] := d[u] + 1;
@@ -143,10 +151,10 @@ procedure BFS(var A : tab; var k : kolejka; var s : integer; var amount : intege
           kolory[v] := szary;
           wstawDoKolejki(k,v);
         end;
+        usun(k);
+        kolory[u] := czarny;
+        A[u] := A[u]^.next;
       end;
-      pobierz(k,useless);
-      kolory[u] := czarny;
-      if A[u]^.next <> nil then A[u] := A[u]^.next;
     end;
   end;
 
@@ -154,14 +162,14 @@ begin
   initTab(A);
   readln(amount);
   addNodes(A,amount);
-  i := 3; 
-  new(k);
   initKolejka(k);
+  i := 2;
   BFS(A,k,i,amount);
 
   for i := 1 to amount do 
-    write(d[i], ' ');
- 
-
+    write(d[i], ' '); 
+  writeln;
+  for i := 1 to amount do
+    write(P[i], ' ');
 
 end. 
