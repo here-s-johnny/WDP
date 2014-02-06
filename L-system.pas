@@ -79,4 +79,4 @@ begin
   description(A);
   interpret(A,axiom); 
   copyPaste;
-end.
+end. 
