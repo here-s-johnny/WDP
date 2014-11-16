@@ -2,7 +2,7 @@ program setGame;
 
 const N = 81;
 
-type deck = array [1..N] of Integer;
+type deck = array [1..N] of integer;
      
 type shape = (oval, rhombus, wave);
 type colour = (red, green, purple);
@@ -15,12 +15,12 @@ type card = record
      end;
 
 var d,t : deck;
-    tableState, deckController : Integer;
-    found : Boolean;
+    tableState, deckController : integer;
+    found : boolean;
 
 procedure getDeck(var d : deck);
 
-  var i,m : Integer;
+  var i,m : integer;
 
   begin
     for i := 1 to N do begin
@@ -29,7 +29,7 @@ procedure getDeck(var d : deck);
     end;
   end;
 
-function makeCard(x : Integer):card;
+function makeCard(x : integer):card;
  
   var 
     c : card;
@@ -117,9 +117,9 @@ function makeCard(x : Integer):card;
   makeCard := c;
   end;
 
-function setFound(x,y,z : card):Boolean;
+function setFound(x,y,z : card):boolean;
 
-  var n,s,c,p : Boolean;
+  var n,s,c,p : boolean;
 
   begin
       n := false;
@@ -144,7 +144,7 @@ function setFound(x,y,z : card):Boolean;
 
 procedure updateTable(var t : deck; var tableState, deckController : integer);
 
-  var i,j : Integer;
+  var i,j : integer;
 
   begin
     tableState := tableState + 3;
@@ -162,7 +162,7 @@ procedure updateTable(var t : deck; var tableState, deckController : integer);
 
 procedure tableOutput(t : deck);
 
-  var i : Integer;  
+  var i : integer;  
 
   begin
     i := 2;
@@ -177,7 +177,7 @@ procedure tableOutput(t : deck);
 
 procedure checkForSets(var t,d : deck);
 
-  var i,j,k,l : Integer;
+  var i,j,k,l : integer;
 
   begin
     found := false;
