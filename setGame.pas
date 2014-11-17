@@ -2,25 +2,27 @@ program setGame;
 
 const N = 81;
 
-type deck = array [1..N] of integer;
+type Deck = array [1..N] of Integer;
      
-type shape = (oval, rhombus, wave);
-type colour = (red, green, purple);
-type pattern = (empty, plain, striped);     
-type card = record
-       n : integer;
-       s : shape;
-       c : colour;
-       p : pattern;
+type Shape = (oval, rhombus, wave);
+type Colour = (red, green, purple);
+type Pattern = (empty, plain, striped);     
+type Card = record
+       n : Integer;
+       s : Shape;
+       c : Colour;
+       p : Pattern;
      end;
 
-var d,t : deck;
-    tableState, deckController : integer;
-    found : boolean;
+var d, t : Deck;
+    tableState, deckController : Integer;
+    found : Boolean;
 
-procedure getDeck(var d : deck);
+procedure getDeck(var d : Deck);
 
-  var i,m : integer;
+// this procedure reads the deck from the input file and stores it in a variable of type Deck
+
+  var i,m : Integer;
 
   begin
     for i := 1 to N do begin
@@ -29,11 +31,13 @@ procedure getDeck(var d : deck);
     end;
   end;
 
-function makeCard(x : integer):card;
+function makeCard(x : Integer):Card;
+
+// this function transforms a number given into a more clear definition of a card
  
   var 
-    c : card;
-    i,j : integer;
+    c : Card;
+    i,j : Integer;
 
   begin
     i := x div 10;
@@ -117,9 +121,11 @@ function makeCard(x : integer):card;
   makeCard := c;
   end;
 
-function setFound(x,y,z : card):boolean;
+function setFound(x, y, z : Card):Boolean;
 
-  var n,s,c,p : boolean;
+// this function checks whether three given cards form a set
+
+  var n, s, c, p : Boolean;
 
   begin
       n := false;
@@ -142,9 +148,9 @@ function setFound(x,y,z : card):boolean;
   setFound := n and s and c and p;
   end;
 
-procedure updateTable(var t : deck; var tableState, deckController : integer);
+procedure updateTable(var t : Deck; var tableState, deckController : Integer);
 
-  var i,j : integer;
+  var i, j : Integer;
 
   begin
     tableState := tableState + 3;
@@ -160,9 +166,9 @@ procedure updateTable(var t : deck; var tableState, deckController : integer);
     end;
   end;
 
-procedure tableOutput(t : deck);
+procedure tableOutput(t : Deck);
 
-  var i : integer;  
+  var i : Integer;  
 
   begin
     i := 2;
@@ -175,28 +181,32 @@ procedure tableOutput(t : deck);
     writeln;
   end;
 
-procedure checkForSets(var t,d : deck);
+procedure checkForSets(var t, d : Deck);
 
-  var i,j,k,l : integer;
+// this procedure checks whether there is a set in the current table, if so, then outputs it
+
+  var i, j, k, l : Integer;
 
   begin
     found := false;
     for i := 1 to tableState do begin
       for j := i + 1 to tableState do begin
         for k := j + 1 to tableState do begin
-          if (not found) and (setFound(makeCard(t[i]),makeCard(t[j]),makeCard(t[k]))) then begin
-            writeln('- ', t[i], ' ', t[j], ' ', t[k]);
-            for l := 1 to N do
-              if (d[l] = t[i]) or (d[l] = t[j]) or (d[l] = t[k]) then d[l] := 0;
-            found := true;
-            if (tableState > 12) or (deckController >= N) then tableState := tableState - 6
-            else tableState := tableState - 3;
+          if (not found) and (setFound(makeCard(t[i]), makeCard(t[j]), makeCard(t[k]))) then
+            begin
+              writeln('- ', t[i], ' ', t[j], ' ', t[k]);
+              for l := 1 to N do
+                if (d[l] = t[i]) or (d[l] = t[j]) or (d[l] = t[k]) then d[l] := 0;
+              found := true;
+              if (tableState > 12) or (deckController >= N) then 
+                tableState := tableState - 6
+              else tableState := tableState - 3;
           end;
         end;
       end;    
     end;
     if (not found) and (deckController < N) then writeln('-');
-    updateTable(t,tableState,deckController);
+    updateTable(t, tableState, deckController);
   end;
 
 
@@ -204,13 +214,13 @@ begin
   getDeck(d);
   tableState := 9;
   deckController := 1;
-  updateTable(t,tableState,deckController);
+  updateTable(t, tableState, deckController);
   while deckController <= N do begin
     tableOutput(t);
-    checkForSets(t,d);
+    checkForSets(t, d);
   end;
   while found do begin
     tableOutput(t);
-    checkForSets(t,d);
+    checkForSets(t, d);
   end;
 end.
