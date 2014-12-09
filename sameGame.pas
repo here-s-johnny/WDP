@@ -175,8 +175,9 @@ procedure computerMove(var A : Board; s : String);
 
   procedure move(i,j : Integer; c : Char);
   
-  // recursive subprocedure which searches for the biggest group that the computer-player is
-  // allowed to remove; it uses another board B to enter each block once only
+  // recursive subprocedure which searches for the biggest group
+  // that the computer-player is allowed to remove; 
+  // it uses another board B to enter each block once only
 
   begin
     if (i <= k) and (i >= 1) and (j >= 1) and (j <= w) and (A[j,i] = c) then begin
@@ -209,8 +210,10 @@ procedure computerMove(var A : Board; s : String);
           counter := 0;
           first := true;
           move(i,j,c);
-          if (counter > biggestCount) or ((counter = biggestCount) and (currentI < biggestI))
-          or ((counter = biggestCount) and (currentI = biggestI) and (currentJ < biggestJ)) then begin
+          if (counter > biggestCount) or 
+          ((counter = biggestCount) and (currentI < biggestI)) or
+          ((counter = biggestCount) and (currentI = biggestI)
+          and (currentJ < biggestJ)) then begin
             biggestCount := counter;
             biggestI := currentI;
             biggestJ := currentJ;
